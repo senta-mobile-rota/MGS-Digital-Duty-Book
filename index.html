@@ -1135,7 +1135,7 @@ navigator.geolocation.getCurrentPosition(
 ================================ */
 let mediaRecorder = null;
 let cameraStream = null;
-
+let recordedChunks = [];
 async function startCameraRecording(){
 
 try {
@@ -1150,7 +1150,15 @@ try {
   );
 if(duty && duty.active){addSystemEntry("CAMERA / AUDIO RECORDING STARTED");}
 
+recordedChunks = [];
+
 mediaRecorder = new MediaRecorder(cameraStream);
+
+mediaRecorder.ondataavailable = function(event){
+  if(event.data && event.data.size > 0){
+    recordedChunks.push(event.data);
+  }
+};
 mediaRecorder.start();
 
 } catch(error) {
@@ -1163,6 +1171,38 @@ mediaRecorder.start();
 
 }
 async function stopCameraRecording(){
+
+  mediaRecorder.onstop = function(){
+
+if(recordedChunks.length === 0){
+  return;
+}
+
+const videoBlob = new Blob(recordedChunks, {
+  type: "video/webm"
+});
+
+const videoURL = URL.createObjectURL(videoBlob);
+
+const downloadLink = document.createElement("a");
+downloadLink.href = videoURL;
+
+const stamp = new Date()
+  .toISOString()
+  .replace(/[:.]/g, "-");
+
+const site = duty?.site || officer?.site || "UNKNOWN";
+const officerNo = officer?.number || "UNKNOWN";
+
+downloadLink.download =
+  "MGS-SITE-" + site +
+  "-OFFICER-" + officerNo +
+  "-" + stamp +
+  ".webm";
+downloadLink.click();
+
+URL.revokeObjectURL(videoURL);
+};
 
 if(mediaRecorder && mediaRecorder.state !== "inactive"){
   mediaRecorder.stop();
