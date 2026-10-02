@@ -1509,7 +1509,10 @@ function addSystemEntry(text){
 
     time:timeText(d),
 
-    text:text,
+timestamp:Date.now(),
+   
+text:text,
+
 
     type:"system"
 
@@ -2290,7 +2293,8 @@ function confirmEndDuty(){
 
 
 
-  showDutyReport();
+createHeadOfficeRecord();
+showDutyReport();
 
 }
 
@@ -2323,7 +2327,84 @@ function escapeHTML(text){
   );
 
 }
+/* ==========================================
+   HEAD OFFICE DUTY STATISTICS
+========================================== */
 
+function calculateDutyStats(){
+
+const stats = {
+  dutyMinutes: 0,
+  patrolCount: 0,
+  patrolMinutes: 0,
+  breakCount: 0,
+  breakMinutes: 0
+};
+
+if(!duty || !duty.start || !duty.end){
+  return stats;
+}
+
+stats.dutyMinutes = Math.round(
+  (new Date(duty.end) - new Date(duty.start)) / 60000
+);
+
+let patrolStart = null;
+let breakStart = null;
+
+duty.entries.forEach(entry => {
+
+  if(!entry.timestamp){
+    return;
+  }
+
+  if(entry.text.startsWith("START PATROL")){
+    patrolStart = new Date(entry.timestamp);
+    stats.patrolCount++;
+  }
+
+  if(entry.text.startsWith("STOP PATROL") && patrolStart){
+    stats.patrolMinutes += Math.round(
+      (new Date(entry.timestamp) - patrolStart) / 60000
+    );
+    patrolStart = null;
+  }
+
+  if(entry.text === "START BREAK"){
+    breakStart = new Date(entry.timestamp);
+    stats.breakCount++;
+  }
+
+  if(entry.text === "FINISH BREAK" && breakStart){
+    stats.breakMinutes += Math.round(
+      (new Date(entry.timestamp) - breakStart) / 60000
+    );
+    breakStart = null;
+  }
+
+});
+
+return stats;
+}
+
+function createHeadOfficeRecord(){
+
+const stats = calculateDutyStats();
+
+const record = {
+  site: duty.site || officer.site,
+  officerNumber: officer.number,
+  dutyStart: duty.start,
+  dutyEnd: duty.end,
+  dutyMinutes: stats.dutyMinutes,
+  patrolCount: stats.patrolCount,
+  patrolMinutes: stats.patrolMinutes,
+  breakCount: stats.breakCount,
+  breakMinutes: stats.breakMinutes
+};
+
+console.log("HEAD OFFICE RECORD", record);
+}
 
 /* ========================================
    RESTORE EXISTING SESSION
@@ -2453,7 +2534,7 @@ ${duty?.site || officer?.site || "Not recorded"}<br>
         font-size:18px;
         font-weight:bold;
       ">
-      VIEW / SAVE PDF
+      VIEW / SAVE REPORT
     </button>
 
     <button
