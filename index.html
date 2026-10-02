@@ -2390,13 +2390,18 @@ return stats;
 function createHeadOfficeRecord(){
 
 const stats = calculateDutyStats();
-
+const recordId =
+  "SITE-" + (duty.site || officer.site) +
+  "-OFFICER-" + officer.number +
+  "-" + duty.start;
 const record = {
+  recordId: recordId,
   site: duty.site || officer.site,
   officerNumber: officer.number,
   dutyStart: duty.start,
   dutyEnd: duty.end,
   dutyMinutes: stats.dutyMinutes,
+  activeDutyMinutes: Math.max(0, stats.dutyMinutes - stats.breakMinutes),
   patrolCount: stats.patrolCount,
   patrolMinutes: stats.patrolMinutes,
   breakCount: stats.breakCount,
@@ -2404,6 +2409,17 @@ const record = {
 };
 
 console.log("HEAD OFFICE RECORD", record);
+const headOfficeQueue =
+  JSON.parse(localStorage.getItem("mgsHeadOfficeQueue")) || [];
+
+headOfficeQueue.push(record);
+
+localStorage.setItem(
+  "mgsHeadOfficeQueue",
+  JSON.stringify(headOfficeQueue)
+);
+
+console.log("PENDING HEAD OFFICE RECORDS:", headOfficeQueue.length);
 }
 
 /* ========================================
