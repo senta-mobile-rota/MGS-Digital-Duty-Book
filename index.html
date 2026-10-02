@@ -510,6 +510,14 @@ textarea{
 
 </button>
 
+<video
+  id="cameraPreview"
+  autoplay
+  muted
+  playsinline
+  style="display:none; width:100%; border-radius:14px; margin:12px 0;">
+</video>
+
 <button
   class="btn red"
   onclick="stopCameraRecording()">
@@ -1144,6 +1152,12 @@ try {
     video: true,
     audio: true
   });
+  const cameraPreview = document.getElementById("cameraPreview");
+
+if(cameraPreview){
+  cameraPreview.srcObject = cameraStream;
+  cameraPreview.style.display = "block";
+}  
 
   alert(
     "CAMERA ACTIVE\n\nCamera and microphone permission granted."
@@ -1212,7 +1226,12 @@ if(cameraStream){
   cameraStream.getTracks().forEach(track => track.stop());
   cameraStream = null;
 }
+const cameraPreview = document.getElementById("cameraPreview");
 
+if(cameraPreview){
+  cameraPreview.srcObject = null;
+  cameraPreview.style.display = "none";
+}
 if(duty && duty.active){
   addSystemEntry("CAMERA / AUDIO RECORDING STOPPED");
 }
