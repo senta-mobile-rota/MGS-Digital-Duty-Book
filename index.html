@@ -195,7 +195,7 @@ h1{
    INPUTS
 ========================= */
 
-input,textarea{
+input,textarea,select{
   width:100%;
   border:1px solid #36576c;
   border-radius:11px;
@@ -403,6 +403,14 @@ textarea{
       id="officerNumber"
       placeholder="Officer / employee number">
 
+      <div style="margin-top:16px;">
+      <label for="siteNumber"><strong>Site Number</strong></label>
+      <select id="siteNumber">
+        <option value="">Select site</option>
+      
+      </select>
+    </div>
+
     <button
       class="btn blue"
       onclick="signIn()">
@@ -429,7 +437,7 @@ textarea{
   </div>
 
   <div class="logo homeLogo">
-    
+  <img src="./img/mgs.png" alt="MGS Logo">
   </div>
 
   <h1>DIGITAL DUTY BOOK</h1>
@@ -437,7 +445,8 @@ textarea{
   <div class="card statusCard">
 
     <span id="homeOfficer"></span>
-
+    <br>
+    <span id="homeSite"></span>
     <br>
 
     <span id="homeDutyStatus" class="statusOff">
@@ -472,6 +481,41 @@ textarea{
 
   </button>
 
+  <button
+  class="btn red"
+  onclick="activateSOS()">
+
+  🚨 SOS
+
+  <div class="small">
+    Emergency Assistance
+  </div>
+
+</button>
+
+<button
+  class="btn blue"
+  onclick="startCameraRecording()">
+
+  🎥 CAM
+
+  <div class="small">
+    Record Video & Audio
+  </div>
+
+</button>
+
+<button
+  class="btn red"
+  onclick="stopCameraRecording()">
+
+  ⏹ STOP RECORDING
+
+  <div class="small">
+    Stop Video & Audio
+  </div>
+
+</button>
 
   <button
     class="btn grey"
@@ -520,6 +564,11 @@ textarea{
     style="text-align:left;margin-bottom:18px">
   </div>
 
+  <div
+  id="notebookSite"
+  class="small"
+  style="text-align:left;margin-bottom:18px;font-weight:bold;">
+</div>
 
   <!-- NO ACTIVE DUTY -->
 
@@ -532,6 +581,8 @@ textarea{
       <div class="small">
         Start duty to create Entry 001.
       </div>
+
+     
 
       <button
         class="btn green"
@@ -972,6 +1023,10 @@ function signIn(){
   .getElementById("officerNumber")
   .value
   .trim();
+  
+  const site = 
+  document.getElementById("siteNumber").
+  value;
 
 
   if(!name){
@@ -982,14 +1037,18 @@ function signIn(){
 
     return;
 
-  }
+  }if(!site){
+  alert("Select a site number.");
+  return;
+}
 
 
   officer = {
 
     name:name,
 
-    number:number
+    number:number,
+    site:site
 
   };
 
@@ -1000,6 +1059,123 @@ function signIn(){
 
 }
 
+/* ================================
+   SOS EMERGENCY
+================================ */
+
+function activateSOS(){
+
+const confirmed = confirm(
+  "ACTIVATE SOS?\n\nThis will record an emergency alert."
+);
+
+if(!confirmed){
+  return;
+}
+
+if(!navigator.geolocation){
+  alert("SOS ACTIVATED\nGPS is not available on this device.");
+  return;
+}
+
+navigator.geolocation.getCurrentPosition(
+
+  function(position){
+
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+
+    if(duty && duty.active){
+  addSystemEntry(
+    "SOS ACTIVATED - EMERGENCY ASSISTANCE REQUESTED - GPS: " +
+    lat.toFixed(6) + ", " + lon.toFixed(6)
+  );
+}
+
+    alert(
+      "SOS ACTIVATED\n\n" +
+      "Site: " + (officer?.site || "Unknown") + "\n" +
+      "GPS: " + lat.toFixed(6) + ", " + lon.toFixed(6)
+    );
+
+  },
+
+  function(){
+
+    if(duty && duty.active){
+  addSystemEntry(
+    "SOS ACTIVATED - EMERGENCY ASSISTANCE REQUESTED - GPS UNAVAILABLE"
+  );
+
+    }
+    alert(
+      "SOS ACTIVATED\n\nGPS location could not be obtained."
+    );
+
+  },
+
+  {
+    enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: 0
+  }
+
+);
+
+}
+
+
+/* ================================
+   CAMERA / AUDIO RECORDING
+================================ */
+let mediaRecorder = null;
+let cameraStream = null;
+
+async function startCameraRecording(){
+
+try {
+
+  cameraStream = await navigator.mediaDevices.getUserMedia({
+    video: true,
+    audio: true
+  });
+
+  alert(
+    "CAMERA ACTIVE\n\nCamera and microphone permission granted."
+  );
+if(duty && duty.active){addSystemEntry("CAMERA / AUDIO RECORDING STARTED");}
+
+mediaRecorder = new MediaRecorder(cameraStream);
+mediaRecorder.start();
+
+} catch(error) {
+
+  alert(
+    "CAMERA UNAVAILABLE\n\nCamera or microphone permission was denied or unavailable."
+  );
+
+}
+
+}
+async function stopCameraRecording(){
+
+if(mediaRecorder && mediaRecorder.state !== "inactive"){
+  mediaRecorder.stop();
+}
+
+if(cameraStream){
+  cameraStream.getTracks().forEach(track => track.stop());
+  cameraStream = null;
+}
+
+if(duty && duty.active){
+  addSystemEntry("CAMERA / AUDIO RECORDING STOPPED");
+}
+
+mediaRecorder = null;
+
+alert("CAMERA RECORDING STOPPED");
+}
 
 /* ========================================
    SIGN OUT
@@ -1078,6 +1254,11 @@ function loadHome(){
   );
 
 
+document
+  .getElementById("homeSite")
+  .innerText = "SITE " + officer.site;
+
+
   const status =
   document
   .getElementById(
@@ -1138,7 +1319,9 @@ function showNotebook(){
     ? " • " + officer.number
     : ""
   );
-
+document
+  .getElementById("notebookSite")
+  .innerText = "SITE " + officer.site;
 
   if(
     duty &&
@@ -1202,6 +1385,8 @@ function startDuty(){
     active:true,
 
     locked:false,
+
+    site:officer.site,
 
     start:d.toISOString(),
 
@@ -2165,6 +2350,9 @@ document.body.innerHTML = `
       <strong>Employee No:</strong>
       ${officer?.number || "Not recorded"}<br>
 
+
+      <strong>Site:</strong>
+${duty?.site || officer?.site || "Not recorded"}<br>
       <strong>Duty Started:</strong>
       ${duty.start || ""}<br>
 
@@ -2222,6 +2410,16 @@ document.body.innerHTML = `
 
   </div>
 `;
+}
+
+const siteSelect = document.getElementById("siteNumber");
+
+for (let i = 1; i <= 200; i++) {
+  const site = String(i).padStart(3, "0");
+  const option = document.createElement("option");
+  option.value = site;
+  option.textContent = "Site " + site;
+  siteSelect.appendChild(option);
 }
 </script>
 </body>
