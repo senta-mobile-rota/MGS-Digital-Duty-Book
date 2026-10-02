@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+viewport-fit=cover">
+
+<meta name="theme-color" content="#061827">
+
+<title>Digital Duty Book</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #061827;
+  color: white;
+}
+
+body {
+  min-height: 100vh;
+
+  background:
+  radial-gradient(
+    circle at top,
+    #123b58 0%,
+    #071d2e 42%,
+    #04121d 100%
+  );
+}
+
+.app {
+
+  max-width: 430px;
+  min-height: 100vh;
+
+  margin: auto;
+
+  padding:
+  calc(20px + env(safe-area-inset-top))
+  22px
+  calc(18px + env(safe-area-inset-bottom));
+
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* PROTOTYPE LABEL */
+
+.prototype {
+
+  text-align: center;
+
+  font-size: 10px;
+  font-weight: bold;
+
+  letter-spacing: 2px;
+
+  color: #8ba9bc;
+
+  margin-bottom: 25px;
+}
+
+
+/* MGS HEADER */
+
+.mgs-badge {
+
+  width: 150px;
+  height: 150px;
+
+  margin: 0 auto 20px;
+
+  border: 3px solid #d7b24a;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background:
+  radial-gradient(
+    circle,
+    #163c55,
+    #071827
+  );
+
+  box-shadow:
+  0 8px 25px rgba(0,0,0,.35);
+
+}
+
+.crown {
+
+  font-size: 38px;
+
+  margin-bottom: 5px;
+
+}
+
+.mgs {
+
+  font-size: 25px;
+
+  font-weight: bold;
+
+  letter-spacing: 3px;
+
+  color: #f0cc58;
+
+}
+
+.guard {
+
+  font-size: 9px;
+
+  margin-top: 5px;
+
+  letter-spacing: 1px;
+
+  color: #d6e0e7;
+
+}
+
+
+/* MAIN TITLE */
+
+h1 {
+
+  text-align: center;
+
+  font-size: 27px;
+
+  margin: 0;
+
+  letter-spacing: 1px;
+
+}
+
+.subtitle {
+
+  text-align: center;
+
+  color: #a8becd;
+
+  font-size: 14px;
+
+  margin-top: 7px;
+
+  margin-bottom: 25px;
+
+}
+
+
+/* OFFICER STATUS */
+
+.status {
+
+  background:
+  rgba(255,255,255,.065);
+
+  border:
+  1px solid rgba(255,255,255,.13);
+
+  border-radius: 15px;
+
+  padding: 15px;
+
+  margin-bottom: 19px;
+
+  text-align: center;
+
+  line-height: 1.55;
+
+  box-shadow:
+  0 6px 18px rgba(0,0,0,.15);
+
+}
+
+.officer {
+
+  font-weight: bold;
+
+  color: white;
+
+}
+
+.duty-status {
+
+  color: #65e28f;
+
+  font-weight: bold;
+
+}
+
+
+/* MAIN BUTTONS */
+
+.main-button {
+
+  border: 0;
+
+  border-radius: 17px;
+
+  padding: 21px 18px;
+
+  margin-bottom: 17px;
+
+  color: white;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  width: 100%;
+
+  box-shadow:
+  0 8px 22px rgba(0,0,0,.28);
+
+  transition:
+  transform .1s ease;
+
+}
+
+.main-button:active {
+
+  transform: scale(.98);
+
+}
+
+
+/* REPORTING */
+
+.reporting {
+
+  background:
+  linear-gradient(
+    135deg,
+    #d9233d,
+    #ff4058
+  );
+
+}
+
+
+/* NOTEBOOK */
+
+.notebooks {
+
+  background:
+  linear-gradient(
+    135deg,
+    #075fcf,
+    #1686ff
+  );
+
+}
+
+
+.button-row {
+
+  display: flex;
+
+  align-items: center;
+
+}
+
+
+.button-icon {
+
+  width: 48px;
+
+  height: 48px;
+
+  min-width: 48px;
+
+  border:
+  2px solid rgba(255,255,255,.85);
+
+  border-radius: 10px;
+
+  margin-right: 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 25px;
+
+  font-weight: bold;
+
+}
+
+
+.button-title {
+
+  display: block;
+
+  font-size: 20px;
+
+  font-weight: bold;
+
+  margin-bottom: 4px;
+
+}
+
+
+.button-sub {
+
+  display: block;
+
+  font-size: 13px;
+
+  opacity: .9;
+
+}
+
+
+/* SYSTEM STATUS */
+
+.system-status {
+
+  margin-top: auto;
+
+  display: flex;
+
+  justify-content: space-around;
+
+  border-top:
+  1px solid rgba(255,255,255,.1);
+
+  padding-top: 18px;
+
+  color: #92aebe;
+
+  font-size: 10px;
+
+  text-align: center;
+
+}
+
+
+.status-dot {
+
+  width: 9px;
+
+  height: 9px;
+
+  background: #4fe080;
+
+  border-radius: 50%;
+
+  margin: 0 auto 6px;
+
+  box-shadow:
+  0 0 8px rgba(79,224,128,.5);
+
+}
+
+
+.footer {
+
+  text-align: center;
+
+  color: #547488;
+
+  font-size: 9px;
+
+  margin-top: 17px;
+
+  letter-spacing: .5px;
+
+}
+
+/* MOBILE APP LAYOUT */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  background: #061827;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overscroll-behavior: none;
+}
+
+.app {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+/* APP HEADER POLISH */
+.prototype {
+  display: inline-block;
+  padding: 6px 12px;
+  margin: 10px auto 18px;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 8px 0 4px;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.subtitle {
+  margin-bottom: 22px;
+  opacity: 0.7;
+  font-size: 13px;
+}
+/* HOME SCREEN APP TILES */
+.btn {
+  width: 100%;
+  min-height: 105px;
+  margin: 12px 0;
+  padding: 20px;
+  border: none;
+  border-radius: 18px;
+  text-align: left;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  transition: transform 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn .small {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.85;
+}

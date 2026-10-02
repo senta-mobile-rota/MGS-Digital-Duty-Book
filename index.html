@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<meta name="theme-color" content="#061827">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent">
+
+<meta name="apple-mobile-web-app-title"
+      content="Digital Duty Book">
+
+<meta name="mobile-web-app-capable"
+      content="yes">
+      <link rel="apple-touch-icon" href="mgs.png">
+<link rel="icon" type="image/png" href="mgs.png">
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<meta name="theme-color" content="#071b2b">
+
+<title>MGS Digital Duty Book</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#061827;
+  color:white;
+}
+
+body{
+  min-height:100vh;
+  background:
+  radial-gradient(circle at top,#17445f 0%,#082235 42%,#04121d 100%);
+}
+
+button,input,textarea{
+  font:inherit;
+}
+
+.app{
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  padding:
+  calc(18px + env(safe-area-inset-top))
+  20px
+  calc(18px + env(safe-area-inset-bottom));
+  display:flex;
+  flex-direction:column;
+}
+
+.hidden{
+  display:none !important;
+}
+
+/* =========================
+   BRANDING
+========================= */
+
+.prototype{
+  text-align:center;
+  font-size:10px;
+  font-weight:bold;
+  letter-spacing:2.5px;
+  color:#9ab5c5;
+  margin-bottom:12px;
+}
+
+.logo{
+  text-align:center;
+  margin:0 auto 8px;
+}
+
+.logo img{
+  display:block;
+  width:150px;
+  max-height:180px;
+  height:auto;
+  object-fit:contain;
+  margin:0 auto;
+  filter:drop-shadow(0 8px 15px rgba(0,0,0,.35));
+}
+
+.homeLogo img{
+  width:105px;
+  max-height:125px;
+}
+
+h1{
+  margin:5px 0;
+  text-align:center;
+  font-size:27px;
+  letter-spacing:.5px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#aec2cf;
+  font-size:13px;
+  margin:7px 0 22px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card{
+  background:rgba(255,255,255,.065);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:16px;
+  padding:17px;
+  margin-bottom:15px;
+  box-shadow:0 7px 20px rgba(0,0,0,.16);
+}
+
+.statusCard{
+  text-align:center;
+  line-height:1.6;
+}
+
+.statusOn{
+  color:#6be394;
+  font-weight:bold;
+}
+
+.statusOff{
+  color:#a9bdc9;
+  font-weight:bold;
+}
+
+.small{
+  font-size:12px;
+  font-weight:normal;
+  opacity:.9;
+  margin-top:4px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn{
+  width:100%;
+  border:0;
+  border-radius:16px;
+  padding:18px 15px;
+  color:white;
+  font-weight:bold;
+  font-size:17px;
+  margin:7px 0;
+  cursor:pointer;
+  box-shadow:0 7px 18px rgba(0,0,0,.20);
+}
+
+.btn:active{
+  transform:scale(.985);
+}
+
+.blue{
+  background:linear-gradient(135deg,#0765d9,#1595ff);
+}
+
+.red{
+  background:linear-gradient(135deg,#d8263f,#ff4b5f);
+}
+
+.green{
+  background:linear-gradient(135deg,#087c45,#16b967);
+}
+
+.grey{
+  background:linear-gradient(135deg,#263d4e,#38566b);
+}
+
+.orange{
+  background:linear-gradient(135deg,#9a570e,#d17b17);
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+input,textarea{
+  width:100%;
+  border:1px solid #36576c;
+  border-radius:11px;
+  background:#0d2a3e;
+  color:white;
+  padding:13px;
+  margin:7px 0;
+  outline:none;
+}
+
+input::placeholder,
+textarea::placeholder{
+  color:#7897aa;
+}
+
+textarea{
+  min-height:135px;
+  resize:vertical;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:17px;
+}
+
+.back{
+  border:0;
+  background:none;
+  color:#62b5ff;
+  padding:5px 0;
+  font-size:15px;
+  cursor:pointer;
+}
+
+.badge{
+  padding:7px 11px;
+  border-radius:20px;
+  background:#15384d;
+  color:#dce8ef;
+  font-size:11px;
+  font-weight:bold;
+}
+
+/* =========================
+   DUTY
+========================= */
+
+.dutyBanner{
+  background:linear-gradient(135deg,#126c3d,#1e9b57);
+  border-radius:15px;
+  padding:15px;
+  margin-bottom:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 7px 18px rgba(0,0,0,.2);
+}
+
+.dutyLeft{
+  line-height:1.45;
+}
+
+.dutyState{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.counter{
+  font-weight:bold;
+}
+
+/* =========================
+   NOTEBOOK ENTRIES
+========================= */
+
+.entry{
+  background:#0d293d;
+  border-left:4px solid #18a3ff;
+  border-radius:10px;
+  padding:13px;
+  margin:10px 0;
+  box-shadow:0 5px 14px rgba(0,0,0,.16);
+}
+
+.entryHead{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  color:#9db4c3;
+  font-size:11px;
+  margin-bottom:8px;
+}
+
+.entryNo{
+  color:white;
+  font-size:15px;
+  font-weight:bold;
+}
+
+.entryText{
+  white-space:pre-wrap;
+  line-height:1.45;
+  font-size:15px;
+}
+
+.attachment{
+  color:#87caff;
+  font-size:11px;
+  margin-top:8px;
+}
+
+/* =========================
+   ACTION GRID
+========================= */
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+/* =========================
+   REPORTING
+========================= */
+
+.reportInfo{
+  background:#351b24;
+  border:1px solid #743848;
+  border-radius:14px;
+  padding:15px;
+  margin-bottom:15px;
+  line-height:1.45;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+  margin-top:auto;
+  padding-top:20px;
+  text-align:center;
+  font-size:10px;
+  color:#718e9f;
+  letter-spacing:.5px;
+}
+
+.system{
+  text-align:center;
+  color:#8faaba;
+  font-size:10px;
+  margin-top:auto;
+  padding-top:18px;
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ========================================
+     SIGN IN
+========================================= -->
+
+<section id="login" class="app">
+
+  <div class="prototype">
+    PROTOTYPE • TEST SYSTEM
+  </div>
+
+ 
+  </div>
+
+  <h1>DIGITAL DUTY BOOK</h1>
+
+  <div class="subtitle">
+    Secure Mobile Duty Recording
+  </div>
+
+  <div class="card">
+
+    <strong>Officer Sign In</strong>
+
+    <div class="small">
+      Prototype authentication
+    </div>
+
+    <input
+      id="officerName"
+      placeholder="Officer name">
+
+    <input
+      id="officerNumber"
+      placeholder="Officer / employee number">
+
+    <button
+      class="btn blue"
+      onclick="signIn()">
+      SIGN IN
+    </button>
+
+  </div>
+
+  <div class="footer">
+    OPERATIONAL VERSION • MICROSOFT 365 AUTHENTICATION
+  </div>
+
+</section>
+
+
+<!-- ========================================
+     HOME
+========================================= -->
+
+<section id="home" class="app hidden">
+
+  <div class="prototype">
+    PROTOTYPE • TEST SYSTEM
+  </div>
+
+  <div class="logo homeLogo">
+    
+  </div>
+
+  <h1>DIGITAL DUTY BOOK</h1>
+
+  <div class="card statusCard">
+
+    <span id="homeOfficer"></span>
+
+    <br>
+
+    <span id="homeDutyStatus" class="statusOff">
+      OFF DUTY
+    </span>
+
+  </div>
+
+
+  <button
+    class="btn red"
+    onclick="reporting()">
+
+    REPORTING
+
+    <div class="small">
+      Defence Security Incident Reporting Form
+    </div>
+
+  </button>
+
+
+  <button
+    class="btn blue"
+    onclick="showNotebook()">
+
+    NOTEBOOKS
+
+    <div class="small">
+      Open Digital Pocket Notebook
+    </div>
+
+  </button>
+
+
+  <button
+    class="btn grey"
+    onclick="signOut()">
+
+    SIGN OUT
+
+  </button>
+
+
+  <div class="system">
+    DEVICE READY • LOCAL STORAGE READY • GPS READY
+  </div>
+
+</section>
+
+
+<!-- ========================================
+     NOTEBOOK
+========================================= -->
+
+<section id="notebook" class="app hidden">
+
+  <div class="topbar">
+
+    <button
+      class="back"
+      onclick="showHome()">
+      ‹ Home
+    </button>
+
+    <span class="badge">
+      DIGITAL PNB
+    </span>
+
+  </div>
+
+
+  <h1 style="text-align:left">
+    My Notebook
+  </h1>
+
+  <div
+    id="notebookOfficer"
+    class="subtitle"
+    style="text-align:left;margin-bottom:18px">
+  </div>
+
+
+  <!-- NO ACTIVE DUTY -->
+
+  <div id="notStarted">
+
+    <div class="card">
+
+      <strong>No active duty notebook</strong>
+
+      <div class="small">
+        Start duty to create Entry 001.
+      </div>
+
+      <button
+        class="btn green"
+        onclick="startDuty()">
+
+        START DUTY
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ACTIVE DUTY -->
+
+  <div id="activeDuty" class="hidden">
+
+
+    <div class="dutyBanner">
+
+      <div class="dutyLeft">
+
+        <div class="dutyState">
+          ● ON DUTY
+        </div>
+
+        <div
+          id="dutyStart"
+          class="small">
+        </div>
+
+      </div>
+
+      <div
+        id="entryCount"
+        class="counter">
+      </div>
+
+    </div>
+
+
+    <div id="entries"></div>
+
+
+    <div
+      id="workingButtons"
+      class="actions">
+
+
+      <button
+        class="btn blue full"
+        onclick="newEntry()">
+
+        🎙 NEW ENTRY
+
+      </button>
+
+
+      <button
+        id="breakBtn"
+        class="btn grey"
+        onclick="toggleBreak()">
+
+        START BREAK
+
+      </button>
+
+
+      <button
+        id="patrolBtn"
+        class="btn grey"
+        onclick="togglePatrol()">
+
+        START PATROL
+
+      </button>
+
+
+      <button
+        class="btn red full"
+        onclick="endDuty()">
+
+        END DUTY
+
+      </button>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================
+     NEW ENTRY
+========================================= -->
+
+<section id="entryScreen" class="app hidden">
+
+  <div class="topbar">
+
+    <button
+      class="back"
+      onclick="showNotebook()">
+
+      ‹ Cancel
+
+    </button>
+
+    <span
+      id="nextSerial"
+      class="badge">
+
+      NEW ENTRY
+
+    </span>
+
+  </div>
+
+
+  <h1 style="text-align:left">
+    Notebook Entry
+  </h1>
+
+
+  <div class="card">
+
+    <textarea
+      id="entryBody"
+      placeholder="Type or dictate notebook entry...">
+    </textarea>
+
+
+    <button
+      class="btn blue"
+      onclick="startVoice()">
+
+      🎙 RECORD
+
+    </button>
+
+
+    <label
+      class="btn grey"
+      style="display:block;text-align:center">
+
+      📷 ADD PHOTO / VIDEO
+
+      <input
+        id="mediaInput"
+        type="file"
+        accept="image/*,video/*"
+        capture="environment"
+        style="display:none"
+        onchange="mediaSelected()">
+
+    </label>
+
+
+    <div
+      id="mediaStatus"
+      class="small"
+      style="text-align:center;margin:8px">
+    </div>
+
+
+    <button
+      class="btn green"
+      onclick="saveEntry()">
+
+      SAVE ENTRY
+
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================
+     SIRF RETURN
+========================================= -->
+
+<section id="reportReturn" class="app hidden">
+
+  <div class="topbar">
+
+    <button
+      class="back"
+      onclick="showHome()">
+
+      ‹ Home
+
+    </button>
+
+    <span class="badge">
+      REPORTING
+    </span>
+
+  </div>
+
+
+  <h1 style="text-align:left">
+    Incident Reporting
+  </h1>
+
+
+  <div class="reportInfo">
+
+    Defence Security Incident Reporting Form
+    opened.
+
+    <br><br>
+
+    Once the report has been submitted,
+    return here to record the submission
+    automatically in the officer's notebook.
+
+  </div>
+
+
+  <div class="card">
+
+    <strong>
+      SIRF submitted?
+    </strong>
+
+
+    <input
+      id="sirfRef"
+      placeholder="SIRF reference (optional)">
+
+
+    <button
+      class="btn green"
+      onclick="confirmSIRF()">
+
+      YES — RECORD IN NOTEBOOK
+
+    </button>
+
+
+    <button
+      class="btn grey"
+      onclick="showHome()">
+
+      NO / RETURN
+
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================
+     END DUTY
+========================================= -->
+
+<section id="endScreen" class="app hidden">
+
+  <div class="topbar">
+
+    <button
+      class="back"
+      onclick="showNotebook()">
+
+      ‹ Back
+
+    </button>
+
+    <span class="badge">
+      END DUTY
+    </span>
+
+  </div>
+
+
+  <h1 style="text-align:left">
+    Duty Review
+  </h1>
+
+
+  <div class="card">
+
+    <div id="summary"></div>
+
+  </div>
+
+
+  <div class="small"
+       style="text-align:center;margin:10px 0 15px">
+
+    Confirming End Duty creates the final
+    notebook entry and locks the duty record.
+
+  </div>
+
+
+  <button
+    class="btn red"
+    onclick="confirmEndDuty()">
+
+    CONFIRM END DUTY
+
+  </button>
+
+</section>
+
+
+
+<script>
+
+/* ========================================
+   DATA
+========================================= */
+
+let officer =
+JSON.parse(
+  localStorage.getItem("ddbOfficer")
+) || null;
+
+
+let duty =
+JSON.parse(
+  localStorage.getItem("ddbDuty")
+) || null;
+
+
+let mediaAttached = false;
+
+
+/* ========================================
+   DATE / TIME
+========================================= */
+
+function now(){
+
+  return new Date();
+
+}
+
+
+function dateText(d){
+
+  return d.toLocaleDateString(
+    "en-GB"
+  );
+
+}
+
+
+function timeText(d){
+
+  return d.toLocaleTimeString(
+    "en-GB",
+    {
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit"
+    }
+  );
+
+}
+
+
+/* ========================================
+   SAVE
+========================================= */
+
+function save(){
+
+  if(officer){
+
+    localStorage.setItem(
+      "ddbOfficer",
+      JSON.stringify(officer)
+    );
+
+  }
+
+
+  if(duty){
+
+    localStorage.setItem(
+      "ddbDuty",
+      JSON.stringify(duty)
+    );
+
+  }else{
+
+    localStorage.removeItem(
+      "ddbDuty"
+    );
+
+  }
+
+}
+
+
+/* ========================================
+   SCREEN CONTROL
+========================================= */
+
+function screen(id){
+
+  document
+  .querySelectorAll("section")
+  .forEach(
+    s=>s.classList.add("hidden")
+  );
+
+
+  document
+  .getElementById(id)
+  .classList.remove("hidden");
+
+}
+
+
+/* ========================================
+   SIGN IN
+========================================= */
+
+function signIn(){
+
+  const name =
+  document
+  .getElementById("officerName")
+  .value
+  .trim();
+
+
+  const number =
+  document
+  .getElementById("officerNumber")
+  .value
+  .trim();
+
+
+  if(!name){
+
+    alert(
+      "Enter officer name."
+    );
+
+    return;
+
+  }
+
+
+  officer = {
+
+    name:name,
+
+    number:number
+
+  };
+
+
+  save();
+
+  loadHome();
+
+}
+
+
+/* ========================================
+   SIGN OUT
+========================================= */
+
+function signOut(){
+
+  if(
+    duty &&
+    duty.active
+  ){
+
+    alert(
+      "End the active duty before signing out."
+    );
+
+    return;
+
+  }
+
+
+  officer = null;
+
+  duty = null;
+
+
+  localStorage.removeItem(
+    "ddbOfficer"
+  );
+
+  localStorage.removeItem(
+    "ddbDuty"
+  );
+
+
+  document
+  .getElementById("officerName")
+  .value = "";
+
+
+  document
+  .getElementById("officerNumber")
+  .value = "";
+
+
+  screen("login");
+
+}
+
+
+/* ========================================
+   HOME
+========================================= */
+
+function loadHome(){
+
+  if(!officer){
+
+    screen("login");
+
+    return;
+
+  }
+
+
+  document
+  .getElementById("homeOfficer")
+  .innerText =
+
+  officer.name +
+
+  (
+    officer.number
+    ? " • " + officer.number
+    : ""
+  );
+
+
+  const status =
+  document
+  .getElementById(
+    "homeDutyStatus"
+  );
+
+
+  if(
+    duty &&
+    duty.active
+  ){
+
+    status.innerText =
+    "ON DUTY";
+
+    status.className =
+    "statusOn";
+
+  }else{
+
+    status.innerText =
+    "OFF DUTY";
+
+    status.className =
+    "statusOff";
+
+  }
+
+
+  screen("home");
+
+}
+
+
+function showHome(){
+
+  loadHome();
+
+}
+
+
+/* ========================================
+   NOTEBOOK
+========================================= */
+
+function showNotebook(){
+
+  document
+  .getElementById(
+    "notebookOfficer"
+  )
+  .innerText =
+
+  officer.name +
+
+  (
+    officer.number
+    ? " • " + officer.number
+    : ""
+  );
+
+
+  if(
+    duty &&
+    duty.active
+  ){
+
+    document
+    .getElementById(
+      "notStarted"
+    )
+    .classList
+    .add("hidden");
+
+
+    document
+    .getElementById(
+      "activeDuty"
+    )
+    .classList
+    .remove("hidden");
+
+
+    renderEntries();
+
+  }else{
+
+    document
+    .getElementById(
+      "notStarted"
+    )
+    .classList
+    .remove("hidden");
+
+
+    document
+    .getElementById(
+      "activeDuty"
+    )
+    .classList
+    .add("hidden");
+
+  }
+
+
+  screen("notebook");
+
+}
+
+
+/* ========================================
+   START DUTY
+========================================= */
+
+function startDuty(){
+
+  const d = now();
+
+
+  duty = {
+
+    active:true,
+
+    locked:false,
+
+    start:d.toISOString(),
+
+    entries:[],
+
+    breakActive:false,
+
+    patrolActive:false
+
+  };
+
+
+  addSystemEntry(
+    "START DUTY"
+  );
+
+
+  save();
+
+  showNotebook();
+
+}
+
+
+/* ========================================
+   SERIAL NUMBER
+========================================= */
+
+function serial(){
+
+  return String(
+    duty.entries.length + 1
+  )
+  .padStart(
+    3,
+    "0"
+  );
+
+}
+
+
+/* ========================================
+   SYSTEM ENTRY
+========================================= */
+
+function addSystemEntry(text){
+
+  const d = now();
+
+
+  duty.entries.push({
+
+    serial:serial(),
+
+    date:dateText(d),
+
+    time:timeText(d),
+
+    text:text,
+
+    type:"system"
+
+  });
+
+
+  save();
+
+}
+
+
+/* ========================================
+   RENDER ENTRIES
+========================================= */
+
+function renderEntries(){
+
+  if(!duty){
+
+    return;
+
+  }
+
+
+  const start =
+  new Date(
+    duty.start
+  );
+
+
+  document
+  .getElementById(
+    "dutyStart"
+  )
+  .innerText =
+
+  "Started " +
+
+  dateText(start) +
+
+  " • " +
+
+  timeText(start);
+
+
+  document
+  .getElementById(
+    "entryCount"
+  )
+  .innerText =
+
+  duty.entries.length +
+
+  (
+    duty.entries.length === 1
+    ? " entry"
+    : " entries"
+  );
+
+
+  const box =
+  document
+  .getElementById(
+    "entries"
+  );
+
+
+  box.innerHTML = "";
+
+
+  duty.entries.forEach(
+
+    entry=>{
+
+      const div =
+      document.createElement(
+        "div"
+      );
+
+
+      div.className =
+      "entry";
+
+
+      div.innerHTML =
+
+      '<div class="entryHead">' +
+
+      '<span class="entryNo">' +
+
+      entry.serial +
+
+      '</span>' +
+
+      '<span>' +
+
+      entry.date +
+
+      ' • ' +
+
+      entry.time +
+
+      '</span>' +
+
+      '</div>' +
+
+      '<div class="entryText">' +
+
+      escapeHTML(
+        entry.text
+      ) +
+
+      '</div>' +
+
+      (
+        entry.media
+
+        ?
+
+        '<div class="attachment">' +
+        '📎 Photo / video attached' +
+        '</div>'
+
+        :
+
+        ''
+      );
+
+
+      box.appendChild(
+        div
+      );
+
+    }
+
+  );
+
+
+  document
+  .getElementById(
+    "breakBtn"
+  )
+  .innerText =
+
+  duty.breakActive
+
+  ? "FINISH BREAK"
+
+  : "START BREAK";
+
+
+  document
+  .getElementById(
+    "patrolBtn"
+  )
+  .innerText =
+
+  duty.patrolActive
+
+  ? "STOP PATROL"
+
+  : "START PATROL";
+
+}
+
+
+/* ========================================
+   NEW ENTRY
+========================================= */
+
+function newEntry(){
+
+  document
+  .getElementById(
+    "entryBody"
+  )
+  .value = "";
+
+
+  document
+  .getElementById(
+    "mediaStatus"
+  )
+  .innerText = "";
+
+
+  mediaAttached = false;
+
+
+  document
+  .getElementById(
+    "nextSerial"
+  )
+  .innerText =
+
+  "ENTRY " +
+  serial();
+
+
+  screen(
+    "entryScreen"
+  );
+
+}
+
+
+/* ========================================
+   SAVE ENTRY
+========================================= */
+
+function saveEntry(){
+
+  const text =
+  document
+  .getElementById(
+    "entryBody"
+  )
+  .value
+  .trim();
+
+
+  if(!text){
+
+    alert(
+      "Enter notebook text first."
+    );
+
+    return;
+
+  }
+
+
+  const d = now();
+
+
+  duty.entries.push({
+
+    serial:serial(),
+
+    date:dateText(d),
+
+    time:timeText(d),
+
+    text:text,
+
+    type:"manual",
+
+    media:mediaAttached
+
+  });
+
+
+  save();
+
+  showNotebook();
+
+}
+
+
+/* ========================================
+   BREAK
+========================================= */
+
+function toggleBreak(){
+
+  if(
+    !duty.breakActive
+  ){
+
+    duty.breakActive =
+    true;
+
+
+    addSystemEntry(
+      "START BREAK"
+    );
+
+  }else{
+
+    duty.breakActive =
+    false;
+
+
+    addSystemEntry(
+      "FINISH BREAK"
+    );
+
+  }
+
+
+  save();
+
+  renderEntries();
+
+}
+
+
+/* ========================================
+   PATROL
+========================================= */
+
+function togglePatrol(){
+
+  if(
+    !duty.patrolActive
+  ){
+
+    duty.patrolActive =
+    true;
+
+
+    addSystemEntry(
+      "START PATROL\nGPS patrol tracking initiated."
+    );
+
+
+    if(
+      navigator.geolocation
+    ){
+
+      navigator
+      .geolocation
+      .getCurrentPosition(
+
+        position=>{
+
+          const latest =
+          duty.entries[
+            duty.entries.length - 1
+          ];
+
+
+          latest.text +=
+
+          "\nGPS start position recorded.";
+
+
+          latest.latitude =
+          position.coords.latitude;
+
+
+          latest.longitude =
+          position.coords.longitude;
+
+
+          save();
+
+          renderEntries();
+
+        },
+
+        ()=>{
+
+          /* Prototype continues
+             if GPS permission
+             is unavailable. */
+
+        }
+
+      );
+
+    }
+
+  }else{
+
+    duty.patrolActive =
+    false;
+
+
+    addSystemEntry(
+      "STOP PATROL\nGPS patrol tracking stopped."
+    );
+
+  }
+
+
+  save();
+
+  renderEntries();
+
+}
+
+
+/* ========================================
+   CAMERA / MEDIA
+========================================= */
+
+function mediaSelected(){
+
+  const file =
+  document
+  .getElementById(
+    "mediaInput"
+  )
+  .files[0];
+
+
+  if(file){
+
+    mediaAttached =
+    true;
+
+
+    document
+    .getElementById(
+      "mediaStatus"
+    )
+    .innerText =
+
+    "✓ " +
+    file.name +
+    " attached";
+
+  }
+
+}
+
+
+/* ========================================
+   VOICE TO TEXT
+========================================= */
+
+/* =========================================
+   VOICE TO TEXT - RECORD / STOP
+========================================= */
+
+let recognition = null;
+let isRecording = false;
+
+function startVoice() {
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert(
+      "Speech recognition is not available in this browser.\n\n" +
+      "Please try the app in Chrome or Edge."
+    );
+    return;
+  }
+
+  const button = document.querySelector(
+    'button[onclick="startVoice()"]'
+  );
+
+  /* ---------- STOP RECORDING ---------- */
+
+  if (isRecording) {
+
+    if (recognition) {
+      recognition.stop();
+    }
+
+    isRecording = false;
+
+    if (button) {
+      button.innerHTML = "🎙 RECORD";
+      button.style.background = "";
+    }
+
+    return;
+  }
+
+  /* ---------- START RECORDING ---------- */
+
+  recognition = new SpeechRecognition();
+
+  recognition.lang = "en-GB";
+
+  recognition.continuous = true;
+
+  recognition.interimResults = false;
+
+  recognition.onstart = function () {
+
+    isRecording = true;
+
+    if (button) {
+      button.innerHTML = "⏹ STOP";
+      button.style.background = "#d93025";
+    }
+  };
+
+  recognition.onresult = function (event) {
+
+    const box =
+      document.getElementById("entryBody");
+
+    if (!box) return;
+
+    let words = "";
+
+    for (
+      let i = event.resultIndex;
+      i < event.results.length;
+      i++
+    ) {
+
+      if (event.results[i].isFinal) {
+
+        words +=
+          event.results[i][0].transcript;
+      }
+    }
+
+    if (words.trim()) {
+
+      if (
+        box.value &&
+        !box.value.endsWith(" ")
+      ) {
+        box.value += " ";
+      }
+
+      box.value += words.trim() + " ";
+
+      /* Keep text box scrolled to newest text */
+
+      box.scrollTop =
+        box.scrollHeight;
+    }
+  };
+
+  recognition.onerror = function (event) {
+
+    console.log(
+      "Speech recognition error:",
+      event.error
+    );
+
+    isRecording = false;
+
+    if (button) {
+      button.innerHTML = "🎙 RECORD";
+      button.style.background = "";
+    }
+
+    if (event.error === "not-allowed") {
+
+      alert(
+        "Microphone access has been blocked.\n\n" +
+        "Please allow microphone access for the app."
+      );
+    }
+  };
+
+  recognition.onend = function () {
+
+    isRecording = false;
+
+    if (button) {
+      button.innerHTML = "🎙 RECORD";
+      button.style.background = "";
+    }
+  };
+
+  try {
+
+    recognition.start();
+
+  } catch (error) {
+
+    console.log(
+      "Unable to start microphone:",
+      error
+    );
+  }
+}
+
+/* ========================================
+   REPORTING / SIRF
+========================================= */
+
+function reporting(){
+
+  window.open(
+
+    "https://gbr01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fblackthorn.ahe.r.mil.uk%2FSIRF%2Fdefault.aspx&data=05%7C02%7Cjames.shanks102%40mod.gov.uk%7C8d5d8e061fd14b89715c08df1f687ebd%7Cbe7760ed5953484bae95d0a16dfa09e5%7C0%7C0%7C639264205829305994%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=Fca6GP32YZCX5Vo4F3Ip4Ky8c8GCeAJPF4A8OGYrfiM%3D&reserved=0",
+
+    "_blank"
+
+  );
+
+
+  screen(
+    "reportReturn"
+  );
+
+}
+
+
+/* ========================================
+   RECORD SIRF IN NOTEBOOK
+========================================= */
+
+function confirmSIRF(){
+
+  if(
+    !duty ||
+    !duty.active
+  ){
+
+    alert(
+
+      "Report acknowledged.\n\n" +
+
+      "There is currently no active duty notebook."
+
+    );
+
+
+    showDutyReport();
+
+    return;
+
+  }
+
+
+  const reference =
+
+  document
+  .getElementById(
+    "sirfRef"
+  )
+  .value
+  .trim();
+
+
+  addSystemEntry(
+
+    "SECURITY INCIDENT REPORT SUBMITTED"
+
+    +
+
+    (
+      reference
+
+      ?
+
+      "\nSIRF Reference: " +
+      reference
+
+      :
+
+      ""
+    )
+
+  );
+
+
+  document
+  .getElementById(
+    "sirfRef"
+  )
+  .value = "";
+
+
+  showNotebook();
+
+}
+
+
+/* ========================================
+   END DUTY
+========================================= */
+
+function endDuty(){
+
+  if(
+    duty.breakActive
+  ){
+
+    alert(
+      "Finish the active break before ending duty."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    duty.patrolActive
+  ){
+
+    alert(
+      "Stop the active patrol before ending duty."
+    );
+
+    return;
+
+  }
+
+
+  const start =
+  new Date(
+    duty.start
+  );
+
+
+  document
+  .getElementById(
+    "summary"
+  )
+  .innerHTML =
+
+  "<strong>" +
+
+  escapeHTML(
+    officer.name
+  ) +
+
+  "</strong><br><br>" +
+
+  "Duty started: " +
+
+  dateText(start) +
+
+  " • " +
+
+  timeText(start) +
+
+  "<br><br>" +
+
+  "Current notebook entries: " +
+
+  duty.entries.length +
+
+  "<br><br>" +
+
+  "Confirming will create the final END DUTY entry.";
+
+
+  screen(
+    "endScreen"
+  );
+
+}
+
+
+/* ========================================
+   CONFIRM END DUTY
+========================================= */
+
+function confirmEndDuty(){
+
+  addSystemEntry(
+    "END DUTY"
+  );
+
+
+  duty.active =
+  false;
+
+
+  duty.locked =
+  true;
+
+
+  duty.end =
+  now().toISOString();
+
+
+  save();
+
+
+  alert(
+  "✓ DUTY COMPLETE\n\n" +
+  "Notebook secured and locked.\n\n" +
+  "✓ Date/time stamped\n" +
+  "✓ Read-only record created\n" +
+  "☁ Queued for OneDrive upload\n\n" +
+  "OFFLINE STORAGE: SECURE\n\n" +
+  "Upload will complete when an authorised network connection is available."
+);
+
+
+
+  showDutyReport();
+
+}
+
+
+/* ========================================
+   SAFE DISPLAY
+========================================= */
+
+function escapeHTML(text){
+
+  return String(text)
+  .replace(
+
+    /[&<>"']/g,
+
+    character=>({
+
+      "&":"&amp;",
+
+      "<":"&lt;",
+
+      ">":"&gt;",
+
+      '"':"&quot;",
+
+      "'":"&#039;"
+
+    })[character]
+
+  );
+
+}
+
+
+/* ========================================
+   RESTORE EXISTING SESSION
+========================================= */
+
+if(officer){
+
+  loadHome();
+
+}else{
+
+  screen(
+    "login"
+  );
+
+}
+
+/* ==========================================
+   IN-APP DUTY REPORT
+========================================== */
+
+function showDutyReport() {
+
+const entries = duty.entries || [];
+
+let entryHTML = "";
+
+entries.forEach((entry, index) => {
+  entryHTML += `
+    <div style="
+      background:#102f42;
+      border:1px solid #35566a;
+      border-radius:12px;
+      padding:16px;
+      margin-bottom:12px;
+    ">
+      <strong>ENTRY ${String(index + 1).padStart(3,"0")}</strong>
+      <div style="font-size:13px;color:#9fb3c1;margin-top:5px;">
+        ${entry.time || entry.timestamp || ""}
+      </div>
+      <div style="margin-top:10px;">
+        ${entry.text || entry.note || entry.content || ""}
+      </div>
+    </div>
+  `;
+});
+
+document.body.innerHTML = `
+  <div style="
+    min-height:100vh;
+    background:#001b2b;
+    color:white;
+    font-family:Arial,sans-serif;
+    padding:28px 20px;
+    box-sizing:border-box;
+  ">
+
+    <div style="
+      font-size:13px;
+      letter-spacing:3px;
+      color:#8fa7b5;
+      text-align:center;
+      margin-bottom:25px;
+    ">
+      PROTOTYPE • TEST SYSTEM
+    </div>
+
+    <h1 style="margin-bottom:5px;">
+      DIGITAL DUTY BOOK
+    </h1>
+
+    <div style="color:#9fb3c1;margin-bottom:25px;">
+      END OF DUTY RECORD
+    </div>
+
+    <div style="
+      background:#102f42;
+      border:1px solid #35566a;
+      border-radius:15px;
+      padding:18px;
+      margin-bottom:25px;
+      line-height:1.6;
+    ">
+
+      <strong>Officer:</strong>
+      ${officer?.name || "Not recorded"}<br>
+
+      <strong>Employee No:</strong>
+      ${officer?.number || "Not recorded"}<br>
+
+      <strong>Duty Started:</strong>
+      ${duty.start || ""}<br>
+
+      <strong>Duty Ended:</strong>
+      ${duty.end || ""}
+
+    </div>
+
+    <h2>Notebook Entries</h2>
+
+    ${entryHTML || "<p>No notebook entries recorded.</p>"}
+
+    <div style="
+      border:2px solid #19b66a;
+      border-radius:12px;
+      padding:16px;
+      text-align:center;
+      margin-top:25px;
+      font-weight:bold;
+    ">
+      ✓ DUTY RECORD CLOSED AND LOCKED
+    </div>
+
+    <button
+      onclick="window.print()"
+      style="
+        width:100%;
+        padding:18px;
+        margin-top:20px;
+        border:0;
+        border-radius:14px;
+        background:#168df5;
+        color:white;
+        font-size:18px;
+        font-weight:bold;
+      ">
+      VIEW / SAVE PDF
+    </button>
+
+    <button
+      onclick="location.reload()"
+      style="
+        width:100%;
+        padding:18px;
+        margin-top:12px;
+        border:0;
+        border-radius:14px;
+        background:#38576a;
+        color:white;
+        font-size:18px;
+        font-weight:bold;
+      ">
+      CLOSE REPORT
+    </button>
+
+  </div>
+`;
+}
+</script>
+</body>
+</html>
