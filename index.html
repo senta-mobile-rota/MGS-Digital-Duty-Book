@@ -605,6 +605,10 @@ textarea{
 
       </button>
 
+      <div id="pendingRecords" class="small" style="text-align:center; margin-top:12px;">
+      0 records pending upload
+    </div>     
+
     </div>
 
   </div>
@@ -1367,7 +1371,22 @@ function showHome(){
 /* ========================================
    NOTEBOOK
 ========================================= */
+function updatePendingRecords(){
 
+const display = document.getElementById("pendingRecords");
+
+if(!display){
+  return;
+}
+
+const queue =
+  JSON.parse(localStorage.getItem("mgsHeadOfficeQueue")) || [];
+
+display.innerText =
+  queue.length + " record" +
+  (queue.length === 1 ? "" : "s") +
+  " pending upload";
+}
 function showNotebook(){
 
   document
@@ -1431,6 +1450,7 @@ document
 
 
   screen("notebook");
+  updatePendingRecords();
 
 }
 
